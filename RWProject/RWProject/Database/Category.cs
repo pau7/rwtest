@@ -28,6 +28,6 @@ namespace RWProject.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category> Category1 { get; set; }
 
-        public virtual Category Category2 { get; set; }
+        public virtual Category Parent { get; set; }
     }
 }

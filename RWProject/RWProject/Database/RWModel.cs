@@ -28,7 +28,7 @@ namespace RWProject.Database
 
             modelBuilder.Entity<Category>()
                 .HasMany(e => e.Category1)
-                .WithOptional(e => e.Category2)
+                .WithOptional(e => e.Parent)
                 .HasForeignKey(e => e.Parent_id);
 
             modelBuilder.Entity<Product>()
