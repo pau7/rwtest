@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RWProject.Helpers;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RWProject.Models
@@ -7,9 +8,9 @@ namespace RWProject.Models
     {
         public long Id { get; set; }
         public string Code { get; set; }
-        public string Name { get; set; }
-        public string CategoryName { get; set; }
-        public string SubcategoryName { get; set; }
+        public string Product { get; set; }
+        public string Category { get; set; }
+        public string Subcategory { get; set; }
         public string Model { get; set; }
         public decimal? Price { get; set; }
         public string Colour { get; set; }

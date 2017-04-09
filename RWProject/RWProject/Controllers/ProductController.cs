@@ -1,6 +1,7 @@
 ﻿using Excel;
 using RWProject.Database;
 using RWProject.Enum;
+using RWProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
 
 namespace RWProject.Controllers
 {
@@ -15,8 +17,27 @@ namespace RWProject.Controllers
     {
         RWModel Model = new RWModel();
         public ActionResult Index()
-        {
+        {            
             return View();
+        }
+
+        public JsonResult GetProducts()
+        {
+            var query = Model.Product.Select(s => new ProductViewModel
+            {
+                Id = s.Id,
+                Category = s.Category != null ? s.Category.Parent != null ? s.Category.Parent.Name : s.Category.Name : "",
+                Subcategory = s.Category != null ? s.Category.Parent == null ? "" : s.Category.Name : "",
+                Size = s.Size,
+                Code = s.Code,
+                Colour = s.Colour,
+                Description = s.Description,
+                Model = s.Model,
+                Product = s.Name,
+                Price = s.Price,
+                Actions = "<a data-id='" + s.Id + "' class='deleteProduct'><i class='fa fa-edit' aria-hidden='true'></i></a> <a data-id='" + s.Id + "' class='deleteProduct'><i class='fa fa-trash' aria-hidden='true'></i></a>"
+            }).ToList();
+            return Json(query, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Upload()
