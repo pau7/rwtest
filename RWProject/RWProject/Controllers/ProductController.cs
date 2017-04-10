@@ -89,7 +89,7 @@ namespace RWProject.Controllers
                     product.Size = viewModel.Size;
                     product.Colour = viewModel.Colour;
                     product.Description = viewModel.Description;
-                    var category = viewModel.SubcategoryId != 0 ? Model.Category.Find(viewModel.SubcategoryId) : viewModel.CategoryId != 0 ? Model.Category.Find(viewModel.Category) : null;
+                    var category = viewModel.SubcategoryId != 0 ? Model.Category.Find(viewModel.SubcategoryId) : viewModel.CategoryId != 0 ? Model.Category.Find(viewModel.CategoryId) : null;
                     product.Category = category;
                     if (product.Id == 0)
                     {
