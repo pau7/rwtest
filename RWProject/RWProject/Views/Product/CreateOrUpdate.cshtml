@@ -1,0 +1,107 @@
+﻿@model RWProject.Models.ProductViewModel
+<br />
+<br />
+<h2>@(Model.Id==0?"Create":"Edit") Product</h2>
+<div class="row">
+    <div class="col-md-10">
+        @using (Html.BeginForm("CreateOrUpdate", "Product", FormMethod.Post))
+        {
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(m => m.Id)
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="Code">Code</label>
+                    @Html.TextBoxFor(m => m.Code, new { placeholder = "BB-0000", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Code)
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Name">Name</label>
+                    @Html.TextBoxFor(m => m.Product, new { placeholder = "Product name", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Product)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="Category">Category</label>
+                    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Id", "Category"), "-- Select Category --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.CategoryId)
+                </div>
+                <div id="SubCatDiv" class="form-group col-md-6" @(Model.CategoryId != 0 ? "" : "style=display:none")>
+                    <label for="Subcategory">Subcategory</label>
+                    @Html.DropDownListFor(m => m.SubcategoryId, new SelectList(Model.Subcategories, "Id", "Category"), "-- Select Subcategory --", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.SubcategoryId)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="Model">Model</label>
+                    @Html.TextBoxFor(m => m.Model, new { placeholder = "Mountain-500", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Model)
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Price">Price</label>
+                    @Html.TextBoxFor(m => m.Price, "{0:0.00}", new { placeholder = "13.25", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Price)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="Colour">Colour</label>
+                    @Html.TextBoxFor(m => m.Colour, new { placeholder = "Black", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Colour)
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="Size">Size</label>
+                    @Html.TextBoxFor(m => m.Size, new { placeholder = "40", @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Size)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label for="Description">Description</label>
+                    @Html.TextAreaFor(m => m.Description, new { placeholder = "Description", @class = "form-control", rows = "10" })
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-10">
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <a href="/Product/Index" class="btn btn-default" style="float:right">Go back</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $("#CategoryId").on("change", function () {
+        var id = $(this).val();
+        if (id == "") {
+            $("#SubCatDiv").css("display", "none");
+            return 0;
+        }
+        $.ajax({
+            type: "GET",
+            url: "/Product/GetSubcategories/",
+            data: { 'id': id },
+            dataType: "json",
+            success: function (data) {
+                var select = $("#SubcategoryId");
+                select.empty();
+                select.append($('<option/>', {
+                    value: 0,
+                    text: "-- Select Subcategory --"
+                }));
+                $.each(data, function (index, data) {
+                    select.append($('<option/>', {
+                        value: data.Id,
+                        text: data.Category
+                    }));
+                });
+                $("#SubCatDiv").css("display", "block");
+            },
+            error: function (response) {
+                //alert("Error");
+            }
+        });
+    })
+</script>
