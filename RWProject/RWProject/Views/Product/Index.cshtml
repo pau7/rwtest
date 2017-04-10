@@ -1,7 +1,9 @@
-﻿@using RWProject.Helpers
-<br />
+﻿<br />
 <br />
 <div class="row">
+    <a href='/Product/CreateOrUpdate/0' class='btn btn-primary CreateProduct'><i class='fa fa-add' aria-hidden='true'></i>New Product</a>
+    <br />
+    <br />
     <table class="table table-striped table-bordered table-hover" id="tableproducts">
         <thead>
             <tr>               
@@ -18,6 +20,9 @@
                     Subcategory
                 </th>
                 <th>
+                    Model
+                </th>
+                <th>
                     Price
                 </th>
                 <th>
@@ -32,16 +37,46 @@
                 <th>
                     Actions
                 </th>
-            </tr>
+            </tr>            
         </thead>
+        <tfoot style="display:table-header-group!important">
+            <tr>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th class="search">Category
+                </th>
+                <th class="search">
+                    Subcategory
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
 
 
 <script>
-     $(document).ready(function () {
-         $('#tableproducts').DataTable({
+    $(document).ready(function () {
+
+        $('#tableproducts th.search').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Filter ' + title + '"/>');
+        });
+        var table = $('#tableproducts').DataTable({
         "ajax": {
             "url": "/Product/GetProducts/",
             "dataSrc": ""
@@ -51,11 +86,23 @@
         { "data": "Product" },
         { "data": "Category" },
         { "data": "Subcategory" },
+        { "data": "Model" },
         { "data": "Price" },
         { "data": "Colour" },
         { "data": "Size" },
         { "data": "Description" },
         { "data": "Actions" }]
+         });
+         table.columns().every(function () {
+             var that = this;
+
+             $('input', this.footer()).on('keyup change', function () {
+                 if (that.search() !== this.value) {
+                     that
+                         .search(this.value)
+                         .draw();
+                 }
+             });
+         });
     });
-});
 </script>
