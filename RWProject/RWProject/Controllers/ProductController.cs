@@ -101,6 +101,17 @@ namespace RWProject.Controllers
             }
             return Redirect("/Product/CreateOrUpdate/"+viewModel.Id);
         }
+        [HttpPost]
+        public JsonResult DeleteProduct(long Id)
+        {
+            using (var Model = new RWModel())
+            {
+                var product = Model.Product.Find(Id);
+                Model.Product.Remove(product);
+                Model.SaveChanges();    
+                return Json(new {ok=true }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         public JsonResult GetSubcategories(long Id)
         {
